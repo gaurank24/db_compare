@@ -188,6 +188,13 @@ try {
         .muted {
             color: var(--muted);
         }
+
+        .subheading {
+            margin: 16px 0 10px;
+            color: var(--text);
+            font-size: 15px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -283,33 +290,49 @@ try {
                             <?php endif; ?>
 
                             <?php if ($difference['missing_in_database_two'] !== [] || $difference['missing_in_database_one'] !== []): ?>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>S. No.</th>
-                                            <th>Difference</th>
-                                            <th>Column Name</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php $serialNumber = 1; ?>
-                                        <?php foreach ($difference['missing_in_database_two'] as $columnName): ?>
-                                            <tr class="diff-missing">
-                                                <td><?php echo escape((string) $serialNumber++); ?></td>
-                                                <td>Present in <?php echo escape($comparison['database_one']); ?>, missing in <?php echo escape($comparison['database_two']); ?></td>
-                                                <td><?php echo escape($columnName); ?></td>
+                                <?php if ($difference['missing_in_database_two'] !== []): ?>
+                                    <div class="subheading">
+                                        Present in <?php echo escape($comparison['database_one']); ?>, Missing in <?php echo escape($comparison['database_two']); ?>
+                                    </div>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>S. No.</th>
+                                                <th>Column Name</th>
                                             </tr>
-                                        <?php endforeach; ?>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($difference['missing_in_database_two'] as $index => $columnName): ?>
+                                                <tr class="diff-missing">
+                                                    <td><?php echo escape((string) ($index + 1)); ?></td>
+                                                    <td><?php echo escape($columnName); ?></td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                <?php endif; ?>
 
-                                        <?php foreach ($difference['missing_in_database_one'] as $columnName): ?>
-                                            <tr class="diff-missing">
-                                                <td><?php echo escape((string) $serialNumber++); ?></td>
-                                                <td>Present in <?php echo escape($comparison['database_two']); ?>, missing in <?php echo escape($comparison['database_one']); ?></td>
-                                                <td><?php echo escape($columnName); ?></td>
+                                <?php if ($difference['missing_in_database_one'] !== []): ?>
+                                    <div class="subheading">
+                                        Present in <?php echo escape($comparison['database_two']); ?>, Missing in <?php echo escape($comparison['database_one']); ?>
+                                    </div>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>S. No.</th>
+                                                <th>Column Name</th>
                                             </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($difference['missing_in_database_one'] as $index => $columnName): ?>
+                                                <tr class="diff-missing">
+                                                    <td><?php echo escape((string) ($index + 1)); ?></td>
+                                                    <td><?php echo escape($columnName); ?></td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                <?php endif; ?>
                             <?php endif; ?>
 
                             <?php if ($difference['type_differences'] !== []): ?>
